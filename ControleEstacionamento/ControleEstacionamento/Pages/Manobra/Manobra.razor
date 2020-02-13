@@ -1,0 +1,58 @@
+﻿@page "/manobra"
+@using  ControleEstacionamento.Data
+@inject RegistroManobraService objService
+
+<h3>Registro de Manobra</h3>
+
+<NavLink class="nav-link" href="AddManobra">
+    <span class="oi oi-plus" aria-hidden="true"></span> Nova Manobra
+</NavLink>
+
+@if (objManobra == null)
+{
+    <p><em>Carregando Manobras ...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Placa</th>
+                <th>Manobrista</th>
+                <th>Data</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var manobra in objManobra)
+            {
+                <tr>
+                    <td>@manobra.Veiculo.Marca</td>
+                    <td>@manobra.Veiculo.Modelo</td>
+                    <td>@manobra.Veiculo.Placa</td>
+                    <td>@manobra.Manobrista.Nome</td>
+                    <td>@manobra.DataManobra</td>
+                    <td>
+                        <a class="nav-link" href="EditarManobra/@manobra.Id">
+                            <span class="oi oi-pencil" aria-hidden="true"></span>Editar
+                        </a>
+                        <a class="nav-link" href="RemoverManobra/@manobra.Id">
+                            <span class="oi oi-trash" aria-hidden="true"></span>Remover
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    List<Data.RegistroManobra> objManobra;
+
+    protected override async Task OnInitializedAsync()
+    {
+        objManobra = await Task.Run(() => objService.GetRegistroManobras());
+    }
+}

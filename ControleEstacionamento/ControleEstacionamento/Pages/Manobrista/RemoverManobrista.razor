@@ -1,0 +1,55 @@
+﻿@page "/RemoverManobrista/{CurrentID}"
+@using ControleEstacionamento.Data
+@inject ManobristaService objManService
+@inject NavigationManager NavigationManager
+
+<h3>Remover Manobrista</h3>
+<hr />
+<h3>Deseja realmente apagar ?</h3>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="form-group">
+            <label>Id Motorista:</label>
+            <label>@manobrista.Id</label>
+        </div>
+        <div class="form-group">
+            <label>Nome:</label>
+            <label>@manobrista.Nome</label>
+        </div>
+        <div class="form-group">
+            <label>CPF:</label>
+            <label>@manobrista.Cpf</label>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <input type="button" class="btn btn-danger" @onclick="@DeleteManobrista" value="Remover" />
+            <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancelar" />
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string CurrentID { get; set; }
+    Data.Manobrista manobrista = new Data.Manobrista();
+
+    protected override async Task OnInitializedAsync()
+    {
+        manobrista = await Task.Run(()=>objManService.GetManobristaById(Convert.ToInt32(CurrentID)));
+    }
+
+    protected void DeleteManobrista()
+    {
+        objManService.DeleteManobrista(manobrista);
+        NavigationManager.NavigateTo("Manobrista");
+
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("Manobrista");
+    }
+}

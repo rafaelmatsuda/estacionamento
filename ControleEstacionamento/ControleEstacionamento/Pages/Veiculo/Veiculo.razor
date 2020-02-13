@@ -1,0 +1,58 @@
+﻿@page "/veiculo"
+@using  ControleEstacionamento.Data
+@inject VeiculoService objVeicService
+
+
+<NavLink class="nav-link" href="AddVeiculo">
+    <span class="oi oi-plus" aria-hidden="true"></span> Novo Veículo
+</NavLink>
+<h1>Cadastro de Veículos</h1>
+@if (objVeiculo == null)
+{
+    <p><em>Carregando Dados ...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id Veículo</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Placa</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var veiculo in objVeiculo)
+            {
+                <tr>
+                    <td>@veiculo.Id</td>
+                    <td>@veiculo.Marca</td>
+                    <td>@veiculo.Modelo</td>
+                    <td>@veiculo.Placa</td>
+                    <td>
+                        <a class="nav-link" href="EditarVeiculo/@veiculo.Id">
+                            <span class="oi oi-pencil" aria-hidden="true"></span>Editar
+                        </a>
+                        <a class="nav-link" href="RemoverVeiculo/@veiculo.Id">
+                            <span class="oi oi-trash" aria-hidden="true"></span>Remover
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    List<Data.Veiculo> objVeiculo;
+
+    protected override async Task OnInitializedAsync()
+    {
+        objVeiculo = await Task.Run(() => objVeicService.GetVeiculo());
+    }
+
+}
+
+

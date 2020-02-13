@@ -1,0 +1,71 @@
+﻿@page "/AddManobra"
+@using ControleEstacionamento.Data
+@inject RegistroManobraService objManService
+@inject ManobristaService manoService
+@inject VeiculoService veicService
+@inject NavigationManager NavigationManager
+
+<h3>Nova Manobra</h3>
+<hr />
+
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="Nome" class="control-label">Nome</label>
+                <select form="Nome" class="form-control" @bind="@idManobrista">
+                    @foreach(var manobrista in manobristas)
+                    {
+                        <option value="@manobrista.Id">@manobrista.Nome</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="Veiculo" class="control-label" >Veículo</label>
+                <select form="Veiculo" class="form-control" @bind="@idVeiculo">
+                    @foreach (var veic in veiculos)
+                    {
+                        <option value="@veic.Id">@veic.Modelo - @veic.Placa</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-success" @onclick="@CreateManobra" value="Salvar" />
+                <input type="button" class="btn btn-danger" @onclick="@Cancel" value="Cancelar" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+
+    Data.RegistroManobra manobra = new Data.RegistroManobra();
+    List<Data.Veiculo> veiculos = new List<Data.Veiculo>();
+    List<Data.Manobrista> manobristas = new List<Data.Manobrista>();
+    int idManobrista;
+    int idVeiculo;
+
+    protected override async Task OnInitializedAsync()
+    {
+        veiculos = veicService.GetVeiculo();
+        manobristas = manoService.GetManobrista();
+    }
+
+    protected void CreateManobra()
+    {
+        manobra.Veiculo = veicService.GetVeiculoById(idVeiculo);
+        manobra.Manobrista = manoService.GetManobristaById(idManobrista);
+        objManService.Create(manobra);
+        NavigationManager.NavigateTo("manobra");
+
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("manobra");
+    }
+
+}

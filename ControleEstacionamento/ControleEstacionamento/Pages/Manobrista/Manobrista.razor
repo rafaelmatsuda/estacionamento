@@ -1,0 +1,59 @@
+﻿@page "/manobrista"
+@using  ControleEstacionamento.Data
+@inject ManobristaService objManobristaService
+
+
+<NavLink class="nav-link" href="AddManobrista">
+    <span class="oi oi-plus" aria-hidden="true"></span> Novo Manobrista
+</NavLink>
+<h1>Cadastro de Manobrista</h1>
+@if(objManobristas == null)
+{
+    <p><em>Carregando Dados ...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id Manobrista</th>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Data Nascimento</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var manobrista in objManobristas)
+            {
+            <tr>
+                <td>@manobrista.Id</td>
+                <td>@manobrista.Nome</td>
+                <td>@manobrista.Cpf</td>
+                <td>@manobrista.DtNascimento</td>
+                <td>
+                    <a class="nav-link" href="EditarManobrista/@manobrista.Id">
+                        <span class="oi oi-pencil" aria-hidden="true"></span>Editar
+                    </a>
+                    <a class="nav-link" href="RemoverManobrista/@manobrista.Id">
+                        <span class="oi oi-trash" aria-hidden="true"></span>Remover
+                    </a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    List<Data.Manobrista> objManobristas;
+
+    protected override async Task OnInitializedAsync()
+    {
+        objManobristas = await Task.Run(()=>objManobristaService.GetManobrista());
+    } 
+
+}
+
+

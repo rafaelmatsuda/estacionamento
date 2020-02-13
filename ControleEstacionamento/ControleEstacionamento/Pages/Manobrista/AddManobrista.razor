@@ -1,0 +1,50 @@
+﻿@page "/AddManobrista"
+@using ControleEstacionamento.Data
+@inject ManobristaService objManService
+@inject NavigationManager NavigationManager
+
+<h3>Novo Manobrista</h3>
+<hr />
+
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="Nome" class="control-label">Nome</label>
+                <input form="Nome" class="form-control" @bind="@manobrista.Nome" />
+            </div>
+            <div class="form-group">
+                <label for="Cpf" class="control-label">CPF</label>
+                <input form="Cpf" class="form-control" @bind="@manobrista.Cpf" />
+            </div>
+            <div class="form-group">
+                <label for="dtNascimento" class="control-label">Data Nascimento</label>
+                <input form="dtNascimento" class="form-control" @bind="@manobrista.DtNascimento" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-success" @onclick="@CreateManobrista" value="Salvar" />
+                <input type="button" class="btn btn-danger" @onclick="@Cancel" value="Cancelar" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+    Data.Manobrista manobrista = new Data.Manobrista();
+
+    protected void CreateManobrista()
+    {
+        objManService.Create(manobrista);
+        NavigationManager.NavigateTo("Manobrista");
+
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("Manobrista");
+    }
+
+}
